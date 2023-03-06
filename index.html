@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App</title>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css"/>
+    <style>
+        #dieImage {
+            width: 250px;
+            height: 250px;
+        }
+
+        #grid {
+            padding-top: 5rem;
+        }
+
+        #button {
+            padding-top: 5rem;
+        }
+
+        :root {
+            --ion-color-primary: #ff6666;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+    <script src="app.js"></script>
+    <style>
+        #scanner-container {
+            size:50%
+        }
+    </style>
+</head>
+<body>
+    <ion-app>
+        <ion-header>
+            <ion-toolbar color="primary">
+                <ion-title>
+                    Allergy
+                </ion-title>
+            </ion-toolbar>
+        </ion-header>
+        <ion-content>
+        <div id="scanner-container"></div>
+        </ion-content>
+        <!-- Quagga Initialisation -->
+        <script>
+            Quagga.init({
+            inputStream : {
+                name : "Live",
+                type : "LiveStream",
+                constraints: {
+                    width:300,
+                    height:300,
+                },
+                target: document.querySelector('#scanner-container')
+            },
+            decoder : {
+                readers : ["code_128_reader", "ean_reader", "ean_8_reader"],
+                debug: {
+                drawBoundingBox: true,
+                showFrequency: true,
+                drawScanline: true,
+                showPattern: true,
+                }
+            }
+            }, function(err) {
+                if (err) {
+                console.log(err);
+                return;
+                }
+                console.log("Initialization finished. Ready to start");
+                Quagga.start();
+            });
+
+            Quagga.onDetected(function(result) {
+            console.log("Barcode detected and decoded : " + result.codeResult.code);
+            });
+        </script>
+    </ion-app>
+        
+</body>
+</html>
